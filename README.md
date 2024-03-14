@@ -1,1 +1,40 @@
 # a-b-testing-marketing
+
+
+
+
+
+# Data preprocessing
+
+
+## Missing values
+
+```
+missing values : 
+ user id          0
+test group       0
+converted        0
+total ads        0
+most ads day     0
+most ads hour    0
+dtype: int64
+```
+
+```
+           user id  total ads  most ads hour
+count   588101.00  588101.00      588101.00
+mean   1310692.22      24.82          14.47
+std     202225.98      43.72           4.83
+min     900000.00       1.00           0.00
+25%    1143190.00       4.00          11.00
+50%    1313725.00      13.00          14.00
+75%    1484088.00      27.00          18.00
+max    1654483.00    2065.00          23.00
+
+        test group most ads day
+count      588101       588101
+unique          2            7
+top            ad       Friday
+freq       564577        92608
+
+```
