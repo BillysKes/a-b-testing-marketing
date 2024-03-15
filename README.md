@@ -55,4 +55,6 @@ exit(outliers_df.sort_values(by='total ads', ascending=False) // 10% of data
 
 ![image](https://github.com/BillysKes/a-b-testing-marketing/assets/73298709/5af13758-6e2f-41d3-9edb-b7218b2486e9)
 
+![image](https://github.com/BillysKes/a-b-testing-marketing/assets/73298709/386244cd-47e4-4fbf-a594-862c3cda1229)
+
 
