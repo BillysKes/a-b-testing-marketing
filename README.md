@@ -144,6 +144,7 @@ else:
 ```
 
 **out []:**
+```
 
 converted    False  True 
 test group               
@@ -156,4 +157,5 @@ Expected frequencies:
 [[550327.71899045  14249.28100955]
  [ 22930.28100955    593.71899045]]
 Reject the null hypothesis. There is a significant difference between the groups.
+```
 
