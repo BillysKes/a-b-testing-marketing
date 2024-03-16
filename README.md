@@ -131,7 +131,7 @@ print(experimental_group['converted'].mean())
 conversion rate for the control group :  0.01785410644448223
 conversion rate for the test group : 0.025546559636683747
 ```
-Observing the results we assume that the ad campaign is more successful because the mean conversion rate is higher compared to the control group.
+Observing the results we assume that the ad campaign is more successful because the conversion rate is higher compared to the control group.
 
 # 6. Hypothesis Testing
 
