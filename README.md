@@ -110,7 +110,7 @@ Only a small portion of people end up buying the product
 
 ![image](https://github.com/BillysKes/a-b-testing-marketing/assets/73298709/16fd85ea-9feb-49ae-8afe-daeb972342e4)
 
-![image](https://github.com/BillysKes/a-b-testing-marketing/assets/73298709/a464e013-5842-400a-86f1-6d4d344fbbee)
+![image](https://github.com/BillysKes/a-b-testing-marketing/assets/73298709/9ce5da0c-0912-4aed-8d21-899ec5f34a17)
 
 
 
