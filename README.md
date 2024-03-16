@@ -15,7 +15,7 @@
 This project aims to run A/B test for a marketing company to evaluate the success of a marketing campaign and determine the impact of advertisements on the sales. Specifically, the project aims to compare the conversion rates between those people who were exposed to advertisements and those who were exposed to Public Service Announcements and discover the effectiveness of the campaign.
 
 # 2. Dataset Description
-
+The dataset contains the users id, how the person were exposed to the product(ad or psa), if the person was converted(did they bought the product or not), the amount of ads seen by person, the day in which the person saw the biggest amount of ads and finally, the hour of the day where the person saw the biggest amount of ads. You can find more information about the dataset here : https://www.kaggle.com/datasets/faviovaz/marketing-ab-testing/data
 
   
 # Data preprocessing
