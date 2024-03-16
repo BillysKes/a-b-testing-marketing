@@ -4,17 +4,16 @@ from matplotlib import pyplot as plt
 
 df = pd.read_csv('C:\\Users\\Vasil\\Downloads\\winsorizedmarketing_AB.csv')
 
-control_group = df[df['test group'] == 'psa']
-experimental_group = df[df['test group'] == 'ad']
-#print(control_group['converted'].mean())
-control_convertRate = (control_group['converted'] == True).sum() / (len(control_group)) # baseline conversion rate
-#exit(control_convertRate)
-experimental_convertRate = (experimental_group['converted'] == True).sum() / (len(experimental_group))
+
+control_group = df[df['test_group'] == 'psa']
+experimental_group = df[df['test_group'] == 'ad']
+print('conversion rate in the control group : ',control_group['converted'].mean()) # baseline conversion rate
+print('conversion rate in the test group :',experimental_group['converted'].mean())
 
 '''plt.figure()
-test_group_count = df.groupby('test group')['test group'].value_counts().reset_index()
-plt.bar(test_group_count['test group'],test_group_count['count'], color=['blue','orange'])
-plt.xlabel("test group")
+test_group_count = df.groupby('test_group')['test_group'].value_counts().reset_index()
+plt.bar(test_group_count['test_group'],test_group_count['count'], color=['blue','orange'])
+plt.xlabel("test_group")
 plt.ylabel("count")
 plt.title("Number of people who saw the advertisement vs who saw a PSA")
 
@@ -26,16 +25,16 @@ plt.ylabel("count")
 plt.title("Number of people who bought the product vs who didn't")
 
 plt.figure()
-mostAdsDay_count = df.groupby('most ads day')['most ads day'].value_counts().reset_index()
-plt.bar(mostAdsDay_count['most ads day'].astype(str),mostAdsDay_count['count'], color=['red','yellow','green','orange','purple','brown','black'])
+mostAdsDay_count = df.groupby('most_ads_day')['most_ads_day'].value_counts().reset_index()
+plt.bar(mostAdsDay_count['most_ads_day'].astype(str),mostAdsDay_count['count'], color=['red','yellow','green','orange','purple','brown','black'])
 plt.xlabel("day")
 plt.ylabel("count")
 plt.title("Total number of ads seen by people")
 plt.figure()
 
-inner = df.groupby(['test group','converted'])['converted'].value_counts()
+inner = df.groupby(['test_group','converted'])['converted'].value_counts()
 inner_labels = inner.index.get_level_values(1)
-outer = df.groupby('test group')['test group'].value_counts()
+outer = df.groupby('test_group')['test_group'].value_counts()
 print(inner)
 print(outer)
 fig, ax = plt.subplots(figsize=(24,12))
@@ -54,8 +53,8 @@ plt.show()'''
 
 #totalAdsmedian=df.groupby('test group')['total ads'].mean()
 #print(totalAdsmedian)
-total_adsPSA=df.loc[df['test group'] == 'psa', 'total ads']
-total_adsAd=df.loc[df['test group'] == 'ad', 'total ads']
+total_adsPSA=df.loc[df['test_group'] == 'psa', 'total_ads']
+total_adsAd=df.loc[df['test_group'] == 'ad', 'total_ads']
 plt.figure()
 plt.boxplot(total_adsPSA)
 plt.figure()
