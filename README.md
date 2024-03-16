@@ -1,22 +1,20 @@
 
 
-1. [Introduction](#Introduction)
-   1. [Project Overview](#project-overview)
-   2. [Dataset Description](#dataset-description)
-2. [Data preprocessing](#data-preprocessing)
-3. [Exploratory Data Analysis (EDA)](#eda)
+1. [Project Overview](#project-overview)
+2. [Dataset Description](#dataset-description)
+3. [Data preprocessing](#data-preprocessing)
+4. [Exploratory Data Analysis (EDA)](#eda)
    1. [Summary Statistics](#summary-statistics)
    2. [Visualizations](#visualizations)
-4. [Hypothesis Testing](#hypothesis-testing) 
+5. [Hypothesis Testing](#hypothesis-testing) 
 
 
-# 1. Introduction
 
+# 1. Project Overview
 
-## 1.1 Project Overview
+This project aims to run A/B test for a marketing company to evaluate the success of a marketing campaign and determine the impact of advertisements on the sales. Specifically, the project aims to compare the conversion rates between those people who were exposed to advertisements and those who were exposed to Public Service Announcements and discover the effectiveness of the campaign.
 
-
-## 1.2 Dataset Description
+# 2. Dataset Description
 
 
   
