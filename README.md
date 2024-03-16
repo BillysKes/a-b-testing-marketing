@@ -23,6 +23,11 @@ The dataset contains the users id, how the person were exposed to the product(ad
 ## Missing values
 
 ```
+In []:
+print('\nmissing values : \n', df.isna().sum())  # missing values detection
+print('\nduplicates :\n', df[df.duplicated()])  # duplicates detection
+
+out []:
 missing values : 
  user id         0
 test group       0
