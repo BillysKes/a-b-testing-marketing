@@ -121,7 +121,7 @@ Alternative Hypothesis ($H_1$): Showing ads has significant effect on the number
 
 
 
-```
+```python
 population_size = df.shape[0]
 confidence_level = 0.99
 margin_error = 0.03
@@ -141,7 +141,7 @@ if p_value < alpha:
     print("Reject the null hypothesis. There is a significant difference between the groups.")
 else:
     print("Fail to reject the null hypothesis. There is no significant difference between the groups.")
-```
+```python
 
 out []:
 ```
