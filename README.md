@@ -24,7 +24,7 @@ The dataset contains the users id, how the person were exposed to the product(ad
 
 ```
 missing values : 
- user id          0
+ user id         0
 test group       0
 converted        0
 total ads        0
