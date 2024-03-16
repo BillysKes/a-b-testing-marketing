@@ -115,3 +115,45 @@ In this nested pie chart we observe that 96% of the people were exposed to adver
 # 6. Hypothesis Testing
 
 Null Hypothesis ($H_0$): Showing ads has no significant effect on the number of purchases
+
+Alternative Hypothesis ($H_1$): Showing ads has significant effect on the number of purchases
+
+
+
+
+```
+population_size = df.shape[0]
+confidence_level = 0.99
+margin_error = 0.03
+sample_size = calculate_sample_size(population_size, confidence_level, margin_error)
+contingency_table = pd.crosstab(df['test group'], df['converted'])
+chi2, p_value, dof, expected  = chi2_contingency(contingency_table)
+
+print(contingency_table)
+print("Chi-square statistic:", chi2)
+print("P-value:", p_value)
+print("Degrees of freedom:", dof)
+print("Expected frequencies:")
+print(expected)
+
+alpha = 0.05
+if p_value < alpha:
+    print("Reject the null hypothesis. There is a significant difference between the groups.")
+else:
+    print("Fail to reject the null hypothesis. There is no significant difference between the groups.")
+```
+
+out []:
+```
+converted    False  True 
+test group               
+ad          550154  14423
+psa          23104    420
+Chi-square statistic: 54.005823883685245
+P-value: 1.9989623063390075e-13
+Degrees of freedom: 1
+Expected frequencies:
+[[550327.71899045  14249.28100955]
+ [ 22930.28100955    593.71899045]]
+Reject the null hypothesis. There is a significant difference between the groups.
+```
