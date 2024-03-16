@@ -19,6 +19,10 @@ The dataset contains the users id, how the person were exposed to the product(ad
   
 # 3. Data preprocessing
 
+```
+df = df.drop('Unnamed: 0', axis=1)
+df.rename(columns=lambda x: x.strip().replace(" ", "_"), inplace=True)
+```
 
 ## Missing values
 In []:
