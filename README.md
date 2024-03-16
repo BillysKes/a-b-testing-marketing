@@ -118,14 +118,10 @@ Null Hypothesis ($H_0$): Showing ads has no significant effect on the number of 
 
 Alternative Hypothesis ($H_1$): Showing ads has significant effect on the number of purchases
 
-
+## Chi-squared test
 
 **In []:**
 ```python
-population_size = df.shape[0]
-confidence_level = 0.99
-margin_error = 0.03
-sample_size = calculate_sample_size(population_size, confidence_level, margin_error)
 contingency_table = pd.crosstab(df['test group'], df['converted'])
 chi2, p_value, dof, expected  = chi2_contingency(contingency_table)
 
@@ -145,7 +141,6 @@ else:
 
 **out []:**
 ```
-
 converted    False  True 
 test group               
 ad          550154  14423
