@@ -3,10 +3,9 @@
 1. [Project Overview](#project-overview)
 2. [Dataset Description](#dataset-description)
 3. [Data preprocessing](#data-preprocessing)
-4. [Exploratory Data Analysis (EDA)](#eda)
-   1. [Summary Statistics](#summary-statistics)
-   2. [Visualizations](#visualizations)
-5. [Hypothesis Testing](#hypothesis-testing) 
+4. [Summary Statistics](#summary-statistics)
+5. [Visualizations](#visualizations)
+6. [Hypothesis Testing](#hypothesis-testing) 
 
 
 
@@ -18,7 +17,7 @@ This project aims to analyze the A/B test results, where this test is conducted 
 The dataset contains the users id, how the person were exposed to the product(ad or psa), if the person was converted(did they bought the product or not), the amount of ads seen by person, the day in which the person saw the biggest amount of ads and finally, the hour of the day where the person saw the biggest amount of ads. You can find more information about the dataset here : https://www.kaggle.com/datasets/faviovaz/marketing-ab-testing/data
 
   
-# Data preprocessing
+# 3. Data preprocessing
 
 
 ## Missing values
@@ -64,6 +63,13 @@ upper_bound = Q3 + 1.5 * IQR
 outliers_df = df[(df['total ads'] < lower_bound) | (df['total ads'] > upper_bound)]
 exit(outliers_df.sort_values(by='total ads', ascending=False) // 10% of data
 ```
+
+
+# 4. Summary Statistics
+
+
+
+# 5. Visualizations
 
 
 
