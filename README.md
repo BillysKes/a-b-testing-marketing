@@ -48,6 +48,10 @@ exit(outliers_df.sort_values(by='total ads', ascending=False) // 10% of data
 ```
 After detecting outliers in this particular variable, we decide to perform winsorization. In this way, we tranform the bottom 5% values to be equal to the value corresponding to the 5th percentile and the upper 5% of the values are set equal to the value corresponding to the 95th percentile
 
+```
+WinsorizedArray = winsorize(df['total ads],(0.05,0.05))
+df['total ads']=WinsorizedArray
+```
 
 # 4. Summary Statistics
 ```
