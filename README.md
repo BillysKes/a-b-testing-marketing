@@ -141,7 +141,8 @@ if p_value < alpha:
     print("Reject the null hypothesis. There is a significant difference between the groups.")
 else:
     print("Fail to reject the null hypothesis. There is no significant difference between the groups.")
-```python
+```
+
 
 out []:
 ```
