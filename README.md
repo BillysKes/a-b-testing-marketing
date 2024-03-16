@@ -120,7 +120,7 @@ Alternative Hypothesis ($H_1$): Showing ads has significant effect on the number
 
 
 
-
+**In []:**
 ```python
 population_size = df.shape[0]
 confidence_level = 0.99
