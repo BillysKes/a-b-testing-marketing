@@ -78,7 +78,19 @@ top            ad       Friday     False
 freq       564577        92608    573258
 
 ```
-
+After the winsorization of 'total ads' variable the statistic results are :
+```
+count    588101.000000
+mean         21.002814
+std          23.281371
+min           1.000000
+25%           4.000000
+50%          13.000000
+75%          27.000000
+max          88.000000
+Name: total ads, dtype: float64
+```
+Standard deviation dropped significantly. Also, max value is now 88, compared to 20065.
 
 # 5. Visualizations
 
