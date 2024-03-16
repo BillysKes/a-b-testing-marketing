@@ -117,7 +117,7 @@ Only a small portion of people end up buying the product
 In this nested pie chart we observe that 96% of the people were exposed to advertisements(Ads) while only 4% were exposed to PSA. Also, we obverve in the inner chart that 2.5% of the 'Ad' people converted(bought the product) while the rest 'Ad' people didn't(93.5%). Also, we notice that almost all 'PSA' people didn't buy the product(3.9% compared to 0.1%). The conversion rate of people who viewed ads instead of PSAs, seem to have higher conversion rate, which means that campaign seem to be succesful.
 ## Conversion rates
 
-Conversion rate is calculated by dividing the number of conversions by the total number of visitors
+Conversion rate is calculated by dividing the number of conversions by the total number of visitors <br />
 **In []:**
 ```python
 control_group = df[df['test_group'] == 'psa']
