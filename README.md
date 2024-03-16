@@ -4,10 +4,10 @@
    1. [Project Overview](#project-overview)
    2. [Dataset Description](#dataset-description)
 2. [Data preprocessing](#data-preprocessing)
-3. [Exploratory Data Analysis (EDA)](eda)
-   1. [#Summary Statistics](summary-statistics)
-   2. [#Visualizations](visualizations)
-4. [Hypothesis Testing](hypothesis-testing) 
+3. [Exploratory Data Analysis (EDA)](#eda)
+   1. [Summary Statistics](#summary-statistics)
+   2. [Visualizations](#visualizations)
+4. [Hypothesis Testing](#hypothesis-testing) 
 
 
   
