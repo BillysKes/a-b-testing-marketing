@@ -60,6 +60,20 @@ plt.boxplot(total_adsPSA)
 plt.figure()
 plt.boxplot(total_adsAd)
 
+avgTotalAdsgrouped=df.groupby(['test_group','converted'])['total_ads'].median().reset_index()
+print(avgTotalAdsgrouped)
+# Pivot the DataFrame to get the data in the right format for plotting
+pivot_df = avgTotalAdsgrouped.pivot(index='test_group', columns='converted', values='total_ads')
+
+# Plotting
+pivot_df.plot(kind='bar', stacked=False)
+plt.title('Amount of ads seen by person (Median)')
+plt.xlabel('Test Group')
+plt.ylabel('Amount')
+plt.xticks(rotation=0)
+plt.legend(title='Converted', labels=['False', 'True'])
+plt.show()
+
 plt.show()
 #print(df['test group'=='psa'])
 # Calculate proportions
