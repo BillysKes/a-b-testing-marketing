@@ -71,11 +71,11 @@ min     900000.00       1.00           0.00
 75%    1484088.00      27.00          18.00
 max    1654483.00    2065.00          23.00
 
-        test group most ads day
-count      588101       588101
-unique          2            7
-top            ad       Friday
-freq       564577        92608
+        test group most ads day converted
+count      588101       588101    588101
+unique          2            7         2
+top            ad       Friday     False
+freq       564577        92608    573258
 
 ```
 
