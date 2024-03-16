@@ -33,6 +33,22 @@ most ads hour    0
 dtype: int64
 ```
 
+
+
+
+## Outliers
+```
+Q1 = df['total ads'].quantile(0.25)
+Q3 = df['total ads'].quantile(0.75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+outliers_df = df[(df['total ads'] < lower_bound) | (df['total ads'] > upper_bound)]
+exit(outliers_df.sort_values(by='total ads', ascending=False) // 10% of data
+```
+
+
+# 4. Summary Statistics
 ```
            user id  total ads  most ads hour
 count   588101.00  588101.00      588101.00
@@ -51,22 +67,6 @@ top            ad       Friday
 freq       564577        92608
 
 ```
-
-
-## Outliers
-```
-Q1 = df['total ads'].quantile(0.25)
-Q3 = df['total ads'].quantile(0.75)
-IQR = Q3 - Q1
-lower_bound = Q1 - 1.5 * IQR
-upper_bound = Q3 + 1.5 * IQR
-outliers_df = df[(df['total ads'] < lower_bound) | (df['total ads'] > upper_bound)]
-exit(outliers_df.sort_values(by='total ads', ascending=False) // 10% of data
-```
-
-
-# 4. Summary Statistics
-
 
 
 # 5. Visualizations
