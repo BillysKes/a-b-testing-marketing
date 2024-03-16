@@ -36,7 +36,7 @@ There aren't any missing values, neither duplicate rows.
 
 
 
-## Outliers
+## Outliers detection
 ```
 Q1 = df['total ads'].quantile(0.25)
 Q3 = df['total ads'].quantile(0.75)
@@ -46,6 +46,7 @@ upper_bound = Q3 + 1.5 * IQR
 outliers_df = df[(df['total ads'] < lower_bound) | (df['total ads'] > upper_bound)]
 exit(outliers_df.sort_values(by='total ads', ascending=False) // 10% of data
 ```
+After detecting outliers in this particular variable, we decide to perform winsorization. In this way, we tranform the bottom 5% values to be equal to the value corresponding to the 5th percentile and the upper 5% of the values are set equal to the value corresponding to the 95th percentile
 
 
 # 4. Summary Statistics
