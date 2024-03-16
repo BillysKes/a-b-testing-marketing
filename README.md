@@ -32,7 +32,7 @@ most ads day     0
 most ads hour    0
 dtype: int64
 ```
-
+There aren't any missing values, neither duplicate rows.
 
 
 
