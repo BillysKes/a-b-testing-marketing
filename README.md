@@ -90,7 +90,7 @@ min           1.000000
 max          88.000000
 Name: total ads, dtype: float64
 ```
-Standard deviation dropped significantly. Also, max value is now 88, compared to 20065.
+Standard deviation dropped significantly. Also, max value is now 88, compared to 20065, the previous value.
 
 # 5. Visualizations
 
