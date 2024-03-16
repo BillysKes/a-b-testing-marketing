@@ -143,7 +143,7 @@ else:
     print("Fail to reject the null hypothesis. There is no significant difference between the groups.")
 ```
 
-
+**out:**
 out []:
 ```
 converted    False  True 
