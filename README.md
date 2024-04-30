@@ -143,16 +143,18 @@ Alternative Hypothesis ($H_1$): Showing ads has significant effect on the number
 
 ## Chi-squared test
 
+A chi-square test of independence is used to determine whether there is a significant association between two categorical variables(test_group and converted)
+
 **In []:**
 ```python
 contingency_table = pd.crosstab(df['test group'], df['converted'])
 chi2, p_value, dof, expected  = chi2_contingency(contingency_table)
 
-print(contingency_table)
-print("Chi-square statistic:", chi2)
-print("P-value:", p_value)
-print("Degrees of freedom:", dof)
-print("Expected frequencies:")
+print(contingency_table) # frequency distribution of the two categorical variables
+print("Chi-square statistic:", chi2) # measures that quantifies the difference between the observed frequencies and the expected frequencies
+print("P-value:", p_value) # a small p-value leads to the rejection of the null hypothesis
+print("Degrees of freedom:", dof) # number of categories minus 1
+print("Expected frequencies:") expected frequencies if there were no association between the categorical variables
 print(expected)
 
 alpha = 0.05
