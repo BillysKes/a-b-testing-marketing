@@ -152,12 +152,12 @@ chi2, p_value, dof, expected  = chi2_contingency(contingency_table)
 
 print(contingency_table) # frequency distribution of the two categorical variables
 print("Chi-square statistic:", chi2) # a measurement that quantifies the difference between the observed frequencies and the expected frequencies
-print("P-value:", p_value) # a small p-value leads to the rejection of the null hypothesis
+print("P-value:", p_value) # a probability measure that quantifies the strength of evidence against the null hypothesis
 print("Degrees of freedom:", dof) # number of categories minus 1
 print("Expected frequencies:") expected frequencies if there were no association between the categorical variables
 print(expected)
 
-alpha = 0.05
+alpha = 0.05 # a small p-value(less than 0.05) leads to the rejection of the null hypothesis
 if p_value < alpha:
     print("Reject the null hypothesis. There is a significant difference between the groups.")
 else:
