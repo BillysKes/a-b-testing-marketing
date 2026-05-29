@@ -1,38 +1,26 @@
-
-
-1. [Project Overview](#project-overview)
-2. [Dataset Description](#dataset-description)
-3. [Data preprocessing](#data-preprocessing)
-4. [Summary Statistics](#summary-statistics)
-5. [Visualizations](#visualizations)
-6. [Hypothesis Testing](#hypothesis-testing) 
-
-
-
 # 1. Project Overview
 
-This project aims to analyze the A/B test results, where this test is conducted for a marketing company to evaluate the success of a marketing campaign and determine the impact of advertisements on the sales. Specifically, the project aims to compare the conversion rates between those people who were exposed to advertisements and those who were exposed to Public Service Announcements and discover the effectiveness of the campaign, and finally aims to test the statistical significance of the results.
+This project aims to analyze the A/B test results conducted for a marketing company to evaluate the success of a marketing campaign and determine the impact of advertisements on sales. Specifically, the project compares the conversion rates between people exposed to advertisements and those exposed to Public Service Announcements (PSAs). By calculating the appropriate statistical sample size, the project rigorously tests the statistical significance of the campaign's effectiveness while avoiding the pitfalls of over-sampling.
 
 # 2. Dataset Description
-The dataset contains the users id, how the person were exposed to the product(ad or psa), if the person was converted(did they bought the product or not), the amount of ads seen by person, the day in which the person saw the biggest amount of ads and finally, the hour of the day where the person saw the biggest amount of ads. You can find more information about the dataset here : https://www.kaggle.com/datasets/faviovaz/marketing-ab-testing/data
+The dataset contains the user ID, how the person was exposed to the product (ad or psa), if the person converted (bought the product or not), the amount of ads seen per person, the day on which the person saw the biggest amount of ads, and finally, the hour of the day when the person saw the biggest amount of ads. You can find more information about the dataset here: https://www.kaggle.com/datasets/faviovaz/marketing-ab-testing/data
 
-  
 # 3. Data preprocessing
 
-```
+```python
 df = df.drop('Unnamed: 0', axis=1)
 df.rename(columns=lambda x: x.strip().replace(" ", "_"), inplace=True)
 ```
 
 ## Missing values
-In []:
-```
+**In []:**
+```python
 print('\nmissing values : \n', df.isna().sum())  # missing values detection
 print('\nduplicates :\n', df[df.duplicated()])  # duplicates detection
 ```
 
-out []:
-```
+**Out []:**
+```text
 missing values : 
  user id         0
 test group       0
@@ -44,27 +32,25 @@ dtype: int64
 ```
 There aren't any missing values, neither duplicate rows.
 
-
-
 ## Outliers detection
-```
+```python
 Q1 = df['total ads'].quantile(0.25)
 Q3 = df['total ads'].quantile(0.75)
 IQR = Q3 - Q1
 lower_bound = Q1 - 1.5 * IQR
 upper_bound = Q3 + 1.5 * IQR
 outliers_df = df[(df['total ads'] < lower_bound) | (df['total ads'] > upper_bound)]
-exit(outliers_df.sort_values(by='total ads', ascending=False) // 10% of data
+exit(outliers_df.sort_values(by='total ads', ascending=False)) // 10% of data
 ```
-After detecting outliers in this particular variable, we decide to perform winsorization. In this way, we tranform the bottom 5% values to be equal to the value corresponding to the 5th percentile and the upper 5% of the values are set equal to the value corresponding to the 95th percentile.
+After detecting outliers in this particular variable, we decide to perform winsorization. In this way, we transform the bottom 5% values to be equal to the value corresponding to the 5th percentile and the upper 5% of the values are set equal to the value corresponding to the 95th percentile.
 
-```
-WinsorizedArray = winsorize(df['total ads],(0.05,0.05))
+```python
+WinsorizedArray = winsorize(df['total ads'],(0.05,0.05))
 df['total ads']=WinsorizedArray
 ```
 
 # 4. Summary Statistics
-```
+```text
            user id  total ads  most ads hour
 count   588101.00  588101.00      588101.00
 mean   1310692.22      24.82          14.47
@@ -80,10 +66,9 @@ count      588101       588101    588101
 unique          2            7         2
 top            ad       Friday     False
 freq       564577        92608    573258
-
 ```
-After the winsorization of 'total ads' variable the statistic results are :
-```
+After the winsorization of the 'total ads' variable the statistic results are:
+```text
 count    588101.000000
 mean         21.002814
 std          23.281371
@@ -94,88 +79,88 @@ min           1.000000
 max          88.000000
 Name: total ads, dtype: float64
 ```
-Standard deviation dropped significantly. Also, max value is now 88, compared to 20065, the previous value.
+Standard deviation dropped significantly. Also, max value is now 88, compared to 2065, the previous value.
 
 # 5. Visualizations
 
+To ensure our visualizations accurately reflect the population intended for A/B testing, we first dynamically calculate the required sample size (99% confidence level, 3% margin of error) resulting in a sample size of 1,838 per group. 
 
+![Figure_1](link_to_your_Figure_1.png)
+*Distribution of total ads seen by users in the control (PSA) vs. test (Ad) groups. The distributions are fairly similar, with medians hovering around 12-13 ads.*
 
-![image](https://github.com/BillysKes/a-b-testing-marketing/assets/73298709/5af13758-6e2f-41d3-9edb-b7218b2486e9)
+![Figure_2](link_to_your_Figure_2.png)
+*Median amount of ads seen broken down by conversion status. Users who converted generally saw more ads/PSAs before purchasing compared to those who did not convert.*
 
-The high majority of people were exposed to advertisements instead of Public Service Announcements
-
-![image](https://github.com/BillysKes/a-b-testing-marketing/assets/73298709/386244cd-47e4-4fbf-a594-862c3cda1229)
-
-Only a small portion of people end up buying the product
-
-![image](https://github.com/BillysKes/a-b-testing-marketing/assets/73298709/16fd85ea-9feb-49ae-8afe-daeb972342e4)
-
-![image](https://github.com/BillysKes/a-b-testing-marketing/assets/73298709/9ce5da0c-0912-4aed-8d21-899ec5f34a17)
-
-
-
-![image](https://github.com/BillysKes/a-b-testing-marketing/assets/73298709/636185ac-1af1-463f-a891-66af1c898a80)
-
-In this nested pie chart we observe that 96% of the people were exposed to advertisements(Ads) while only 4% were exposed to PSA. Also, we obverve in the inner chart that 2.5% of the 'Ad' people converted(bought the product) while the rest 'Ad' people didn't(93.5%). Also, we notice that almost all 'PSA' people didn't buy the product(3.9% compared to 0.1%). The conversion rate of people who viewed ads instead of PSAs, seem to have higher conversion rate, which means that campaign seem to be succesful.
 ## Conversion rates
 
-Conversion rate is calculated by dividing the number of conversions by the total number of visitors. <br /> <br />
+Conversion rate is calculated by dividing the number of conversions by the total number of visitors within our statistically sized samples.
+
 **In []:**
 ```python
-control_group = df[df['test_group'] == 'psa']
-experimental_group = df[df['test_group'] == 'ad']
-print(control_group['converted'].mean()) # baseline conversion rate
-print(experimental_group['converted'].mean())
+print('Conversion rate in the control group (Sample): ', control_sample['converted'].mean())
+print('Conversion rate in the test group (Sample): ', test_sample['converted'].mean())
 ```
 
 **Out []:**
+```text
+Conversion rate in the control group (Sample):  0.02013057671381937
+Conversion rate in the test group (Sample):  0.025027203482045703
 ```
-conversion rate for the control group :  0.01785410644448223
-conversion rate for the test group : 0.025546559636683747
-```
-Observing the results we assume that the ad campaign is more successful because the conversion rate is higher compared to the control group.
+While the conversion rate in the test group (~2.50%) is slightly higher than the control group (~2.01%), we must test this difference for statistical significance.
 
 # 6. Hypothesis Testing
 
-Null Hypothesis ($H_0$): Showing ads has no significant effect on the number of purchases
+* **Null Hypothesis ($H_0$):** Showing ads has no significant effect on the number of purchases.
+* **Alternative Hypothesis ($H_1$):** Showing ads has a significant effect on the number of purchases.
 
-Alternative Hypothesis ($H_1$): Showing ads has significant effect on the number of purchases
+## The "Large N" Problem and Proper Sample Sizing
+If we run a frequentist statistical test (like a Chi-Square) on the entire historical dataset of 588,000+ rows, the test becomes hyper-sensitive. At that volume, even a fraction of a percent difference will trigger a mathematically "significant" result (p-value near 0), which can lead to false confidence in a campaign that actually has negligible business impact. 
 
-## Chi-squared test
-
-A chi-square test of independence is used to determine whether there is a significant association between two categorical variables(test_group and converted)
+To prevent this, we calculate the required sample size first and sample our data accordingly before running the Chi-square test of independence.
 
 **In []:**
 ```python
-contingency_table = pd.crosstab(df['test group'], df['converted'])
-chi2, p_value, dof, expected  = chi2_contingency(contingency_table)
+# 1. Dynamically calculate sample size
+sample_size = calculate_sample_size(population_size, 0.99, 0.03)
+print(f"Required sample size per group: {sample_size}")
 
-print(contingency_table) # frequency distribution of the two categorical variables
-print("Chi-square statistic:", chi2) # a measurement that quantifies the difference between the observed frequencies and the expected frequencies
-print("P-value:", p_value) # a probability measure that quantifies the strength of evidence against the null hypothesis
-print("Degrees of freedom:", dof) # number of categories minus 1
-print("Expected frequencies:") expected frequencies if there were no association between the categorical variables
-print(expected)
+# 2. Draw the samples and combine
+test_sample = experimental_group.sample(n=sample_size, random_state=42)
+control_sample = control_group.sample(n=sample_size, random_state=42)
+sampled_df = pd.concat([control_sample, test_sample])
 
-alpha = 0.05 # a small p-value(less than 0.05) leads to the rejection of the null hypothesis
+# 3. Run the Chi-Square test on the properly sized sample
+contingency_table = pd.crosstab(sampled_df['test_group'], sampled_df['converted'])
+chi2, p_value, dof, expected = chi2_contingency(contingency_table)
+
+print("\nContingency Table (Sampled Data):")
+print(contingency_table)
+print(f"Chi-square statistic: {chi2:.4f}")
+print(f"P-value: {p_value:.4e}")
+
+alpha = 0.05
 if p_value < alpha:
     print("Reject the null hypothesis. There is a significant difference between the groups.")
 else:
     print("Fail to reject the null hypothesis. There is no significant difference between the groups.")
 ```
 
-**out []:**
-```
-converted    False  True 
-test group               
-ad          550154  14423
-psa          23104    420
-Chi-square statistic: 54.005823883685245
-P-value: 1.9989623063390075e-13
-Degrees of freedom: 1
-Expected frequencies:
-[[550327.71899045  14249.28100955]
- [ 22930.28100955    593.71899045]]
-Reject the null hypothesis. There is a significant difference between the groups.
+**Out []:**
+```text
+Required sample size per group: 1838
+
+Contingency Table (Sampled Data):
+converted   False  True 
+test_group              
+ad           1792     46
+psa          1801     37
+Chi-square statistic: 0.7889
+P-value: 3.7443e-01
+
+Fail to reject the null hypothesis. There is no significant difference between the groups.
 ```
 
+### **Business Conclusion**
+By applying rigorous sample sizing rather than testing the entire historical database, the p-value sits at 0.37 (well above the 0.05 alpha threshold). We fail to reject the null hypothesis. 
+
+**Insight:** Mathematically speaking, the advertisement campaign did not meaningfully outperform the baseline Public Service Announcement. The business should investigate the quality/targeting of the ad campaign before scaling ad spend further, as the slight lift in conversion is likely due to random chance rather than ad effectiveness.
