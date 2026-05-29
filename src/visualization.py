@@ -1,81 +1,57 @@
+import math
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+from scipy.stats import norm
+
+# 1. Bring in the sampling logic so visualizations match the A/B test
+def calculate_sample_size(population_size, confidence_level, margin_error, p=0.5):
+    z = norm.ppf(1 - (1 - confidence_level) / 2)
+    n = (z ** 2 * p * (1 - p)) / (margin_error ** 2)
+    n = n / (1 + ((n - 1) / population_size))
+    return math.ceil(n)
 
 df = pd.read_csv('C:\\Users\\Vasil\\Downloads\\winsorizedmarketing_AB.csv')
 
-
 control_group = df[df['test_group'] == 'psa']
 experimental_group = df[df['test_group'] == 'ad']
-print('conversion rate in the control group : ',control_group['converted'].mean()) # baseline conversion rate
-print('conversion rate in the test group :',experimental_group['converted'].mean())
 
-'''plt.figure()
-test_group_count = df.groupby('test_group')['test_group'].value_counts().reset_index()
-plt.bar(test_group_count['test_group'],test_group_count['count'], color=['blue','orange'])
-plt.xlabel("test_group")
-plt.ylabel("count")
-plt.title("Number of people who saw the advertisement vs who saw a PSA")
+population_size = df.shape[0]
+sample_size = calculate_sample_size(population_size, 0.99, 0.03)
 
-plt.figure()
-converted_count = df.groupby('converted')['converted'].value_counts().reset_index()
-plt.bar(converted_count['converted'].astype(str),converted_count['count'], color=['blue','orange'])
-plt.xlabel("converted")
-plt.ylabel("count")
-plt.title("Number of people who bought the product vs who didn't")
+test_sample = experimental_group.sample(n=sample_size, random_state=42)
+control_sample = control_group.sample(n=sample_size, random_state=42)
+sampled_df = pd.concat([control_sample, test_sample])
 
-plt.figure()
-mostAdsDay_count = df.groupby('most_ads_day')['most_ads_day'].value_counts().reset_index()
-plt.bar(mostAdsDay_count['most_ads_day'].astype(str),mostAdsDay_count['count'], color=['red','yellow','green','orange','purple','brown','black'])
-plt.xlabel("day")
-plt.ylabel("count")
-plt.title("Total number of ads seen by people")
-plt.figure()
+print('Conversion rate in the control group (Sample): ', control_sample['converted'].mean())
+print('Conversion rate in the test group (Sample): ', test_sample['converted'].mean())
 
-inner = df.groupby(['test_group','converted'])['converted'].value_counts()
-inner_labels = inner.index.get_level_values(1)
-outer = df.groupby('test_group')['test_group'].value_counts()
-print(inner)
-print(outer)
-fig, ax = plt.subplots(figsize=(24,12))
-size = 0.3
-ax.pie(outer.values.flatten(), radius=1,
-       labels=outer.index,
-       autopct='%1.1f%%',
-       wedgeprops=dict(width=size, edgecolor='w'))
+# 2. Plot Boxplots side-by-side for clean comparison
+total_adsPSA = control_sample['total_ads']
+total_adsAd = test_sample['total_ads']
 
-ax.pie(inner.values.flatten(), radius=1-size,
-       labels = inner_labels,
-autopct='%1.1f%%',
-       wedgeprops=dict(width=size, edgecolor='w'))
-ax.set(aspect="equal", title='Distribution of Converted by Test Group')
-plt.show()'''
+fig, axes = plt.subplots(1, 2, figsize=(10, 5))
+axes[0].boxplot(total_adsPSA)
+axes[0].set_title('Total Ads Seen (PSA / Control)')
+axes[0].set_ylabel('Amount of Ads')
 
-#totalAdsmedian=df.groupby('test group')['total ads'].mean()
-#print(totalAdsmedian)
-total_adsPSA=df.loc[df['test_group'] == 'psa', 'total_ads']
-total_adsAd=df.loc[df['test_group'] == 'ad', 'total_ads']
-plt.figure()
-plt.boxplot(total_adsPSA)
-plt.figure()
-plt.boxplot(total_adsAd)
+axes[1].boxplot(total_adsAd)
+axes[1].set_title('Total Ads Seen (Ad / Test)')
 
-avgTotalAdsgrouped=df.groupby(['test_group','converted'])['total_ads'].median().reset_index()
-print(avgTotalAdsgrouped)
+plt.tight_layout()
+plt.show()
+
+# 3. Bar chart for median ads seen by conversion status (using SAMPLED data)
+avgTotalAdsgrouped = sampled_df.groupby(['test_group', 'converted'])['total_ads'].median().reset_index()
+
 # Pivot the DataFrame to get the data in the right format for plotting
 pivot_df = avgTotalAdsgrouped.pivot(index='test_group', columns='converted', values='total_ads')
 
 # Plotting
-pivot_df.plot(kind='bar', stacked=False)
-plt.title('Amount of ads seen by person (Median)')
+pivot_df.plot(kind='bar', stacked=False, figsize=(8, 6))
+plt.title('Amount of Ads Seen by Person (Median) - Sampled Data')
 plt.xlabel('Test Group')
 plt.ylabel('Amount')
 plt.xticks(rotation=0)
 plt.legend(title='Converted', labels=['False', 'True'])
 plt.show()
-
-plt.show()
-#print(df['test group'=='psa'])
-# Calculate proportions
-
-
