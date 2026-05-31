@@ -85,12 +85,12 @@ Standard deviation dropped significantly. Also, max value is now 88, compared to
 
 To ensure our visualizations accurately reflect the population intended for A/B testing, we first dynamically calculate the required sample size (99% confidence level, 3% margin of error) resulting in a sample size of 1,838 per group. 
 
-![Figure_1](https://github.com/user-attachments/assets/be0eaf34-e418-4fc7-9323-1550ae77e219.png)
 <img width="1000" height="500" alt="Figure_1" src="https://github.com/user-attachments/assets/528d1c36-bba2-4ffd-a9a3-9f233930f688" />
 
 *Distribution of total ads seen by users in the control (PSA) vs. test (Ad) groups. The distributions are fairly similar, with medians hovering around 12-13 ads.*
 
-![Figure_2](link_to_your_Figure_2.png)
+<img width="800" height="600" alt="Figure_2" src="https://github.com/user-attachments/assets/6c6f8945-c66d-4c7f-8af1-8996e7644b82" />
+
 *Median amount of ads seen broken down by conversion status. Users who converted generally saw more ads/PSAs before purchasing compared to those who did not convert.*
 
 ## Conversion rates
