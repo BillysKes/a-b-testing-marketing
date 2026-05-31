@@ -83,16 +83,17 @@ Standard deviation dropped significantly. Also, max value is now 88, compared to
 
 # 5. Visualizations
 
-To ensure our visualizations accurately reflect the population intended for A/B testing, we first dynamically calculate the required sample size (99% confidence level, 3% margin of error) resulting in a sample size of 1,838 per group. 
+To ensure our visualizations and tests are statistically rigorous without falling prey to the "Large N" problem (where massive datasets trigger false positives), we dynamically calculate the required sample size using a Power Analysis.
 
-<img width="1000" height="500" alt="Figure_1" src="https://github.com/user-attachments/assets/528d1c36-bba2-4ffd-a9a3-9f233930f688" />
+Targeting an 80% statistical power, a 5% alpha, and a 20% relative Minimum Detectable Effect (MDE), the formula required roughly 23,700 users per group. Since our historical control group only contained 23,524 users, we implemented a safety check to cap the sample size at the maximum available pool (23,524 per group) to run our visualizations and tests.
 
-*Distribution of total ads seen by users in the control (PSA) vs. test (Ad) groups. The distributions are fairly similar, with medians hovering around 12-13 ads.*
+<img width="1000" height="500" alt="Figure_1" src="https://github.com/user-attachments/assets/78fc504a-7bbb-4c18-9178-81211ff71881" />
 
-<img width="800" height="600" alt="Figure_2" src="https://github.com/user-attachments/assets/6c6f8945-c66d-4c7f-8af1-8996e7644b82" />
+*Distribution of total ads seen by users in the control (PSA) vs. test (Ad) groups. The distributions are fairly similar, with medians hovering around 12-13 ads.
 
-*Median amount of ads seen broken down by conversion status. Users who converted generally saw more ads/PSAs before purchasing compared to those who did not convert.*
+<img width="800" height="600" alt="Figure_2" src="https://github.com/user-attachments/assets/46b389e0-1429-46a2-8bbb-ae11a0101266" />
 
+*Median amount of ads seen broken down by conversion status. Users who converted generally saw more ads/PSAs before purchasing compared to those who did not convert.
 ## Conversion rates
 
 Conversion rate is calculated by dividing the number of conversions by the total number of visitors within our statistically sized samples.
@@ -105,33 +106,42 @@ print('Conversion rate in the test group (Sample): ', test_sample['converted'].m
 
 **Out []:**
 ```text
-Conversion rate in the control group (Sample):  0.02013057671381937
-Conversion rate in the test group (Sample):  0.025027203482045703
+Conversion rate in the control group (Sample):  0.01785410644448223
+Conversion rate in the test group (Sample):  0.027078728107464718
 ```
-While the conversion rate in the test group (~2.50%) is slightly higher than the control group (~2.01%), we must test this difference for statistical significance.
+The conversion rate in the test group (~2.71%) is noticeably higher than the control group (~1.79%). We will now rigorously test this difference for statistical significance.
 
 # 6. Hypothesis Testing
 
 * **Null Hypothesis ($H_0$):** Showing ads has no significant effect on the number of purchases.
 * **Alternative Hypothesis ($H_1$):** Showing ads has a significant effect on the number of purchases.
 
-## The "Large N" Problem and Proper Sample Sizing
-If we run a frequentist statistical test (like a Chi-Square) on the entire historical dataset of 588,000+ rows, the test becomes hyper-sensitive. At that volume, even a fraction of a percent difference will trigger a mathematically "significant" result (p-value near 0), which can lead to false confidence in a campaign that actually has negligible business impact. 
+## Power Analysis & Dynamic Sample Sizing
+Rather than testing the entire dataset of 588,000+ rows (which makes frequentist tests hyper-sensitive to negligible effects), we calculate the required sample size first. We set a realistic goal: the Ad must perform at least 20% better than the PSA baseline to be considered a success.
 
-To prevent this, we calculate the required sample size first and sample our data accordingly before running the Chi-square test of independence.
 
 **In []:**
 ```python
-# 1. Dynamically calculate sample size
-sample_size = calculate_sample_size(population_size, 0.99, 0.03)
-print(f"Required sample size per group: {sample_size}")
+# 1. Calculate the actual baseline conversion rate from the control group
+baseline_rate = control_group['converted'].mean()
 
-# 2. Draw the samples and combine
+# 2. Define Minimum Detectable Effect (MDE) - 20% relative lift
+relative_mde = 0.20 
+expected_rate = baseline_rate * (1 + relative_mde)
+
+# 3. Calculate required sample size (80% Power, 5% Alpha)
+calculated_sample_size = calculate_ab_sample_size(baseline_rate, expected_rate, alpha=0.05, power=0.80)
+
+# 4. SAFETY CHECK: Cap sample size to available data if required size exceeds it
+max_available = min(len(control_group), len(experimental_group))
+sample_size = min(calculated_sample_size, max_available)
+
+# Draw the samples and combine
 test_sample = experimental_group.sample(n=sample_size, random_state=42)
 control_sample = control_group.sample(n=sample_size, random_state=42)
 sampled_df = pd.concat([control_sample, test_sample])
 
-# 3. Run the Chi-Square test on the properly sized sample
+# Run the Chi-Square test on the properly sized sample
 contingency_table = pd.crosstab(sampled_df['test_group'], sampled_df['converted'])
 chi2, p_value, dof, expected = chi2_contingency(contingency_table)
 
@@ -140,8 +150,8 @@ print(contingency_table)
 print(f"Chi-square statistic: {chi2:.4f}")
 print(f"P-value: {p_value:.4e}")
 
-alpha = 0.05
-if p_value < alpha:
+alpha_test = 0.05
+if p_value < alpha_test:
     print("Reject the null hypothesis. There is a significant difference between the groups.")
 else:
     print("Fail to reject the null hypothesis. There is no significant difference between the groups.")
@@ -149,20 +159,27 @@ else:
 
 **Out []:**
 ```text
-Required sample size per group: 1838
+Dynamic Baseline Rate: 0.0179
+Target Expected Rate (+20% MDE): 0.0214
+Calculated required sample size: 23703
+Warning: Required sample size exceeds available data in the smallest group.
+Capping sample size to maximum available: 23524
+
+--- A/B Test Results ---
 
 Contingency Table (Sampled Data):
 converted   False  True 
 test_group              
-ad           1792     46
-psa          1801     37
-Chi-square statistic: 0.7889
-P-value: 3.7443e-01
+ad          22887    637
+psa         23104    420
 
-Fail to reject the null hypothesis. There is no significant difference between the groups.
+Chi-square statistic: 45.1545
+P-value: 1.8209e-11
+
+--- Conclusion ---
+Reject the null hypothesis. There is a significant difference between the groups.
 ```
 
 ### **Business Conclusion**
-By applying rigorous sample sizing rather than testing the entire historical database, the p-value sits at 0.37 (well above the 0.05 alpha threshold). We fail to reject the null hypothesis. 
+By applying a rigorous Power Analysis, we determined that we needed ~23,700 users to reliably detect a 20% lift in sales. Capping our test at the available 23,524 users per group, the test yielded a p-value of 1.82e-11, which is far below our 0.05 alpha threshold. We successfully reject the null hypothesis.
 
-**Insight:** Mathematically speaking, the advertisement campaign did not meaningfully outperform the baseline Public Service Announcement. The business should investigate the quality/targeting of the ad campaign before scaling ad spend further, as the slight lift in conversion is likely due to random chance rather than ad effectiveness.
